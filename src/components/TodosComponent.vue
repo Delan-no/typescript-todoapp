@@ -1,13 +1,13 @@
 <template>
   <div>
     <!-- Header -->
-    <Header />
+    <Header @add-todo="addTodo" />
 
     <!-- TodoMain -->
     <TodoMain :taches="todos" />
 
     <!-- TodoFooter -->
-    <TodoFooter />
+    <TodoFooter :todos="todos" />
   </div>
 </template>
 
@@ -15,30 +15,18 @@
 import Header from '@/components/TodoHeader.vue'
 import TodoMain from '@/components/TodoMain.vue'
 import TodoFooter from '@/components/TodoFooter.vue'
+import type { Todo } from '@/@types'
+import { ref } from 'vue'
 
-interface Todo {
-  id: number
-  title: string
-  completed: boolean
+const todos = ref<Todo[]>([])
+
+function addTodo(value: string) {
+  todos.value.push({
+    id: 0,
+    title: value,
+    completed: false
+  })
 }
-
-const todos: Todo[] = [
-  {
-    id: 1,
-    title: 'Tache 1',
-    completed: true
-  },
-  {
-    id: 2,
-    title: 'Tache 2',
-    completed: false
-  },
-  {
-    id: 3,
-    title: 'Tache 3',
-    completed: false
-  }
-]
 </script>
 
 <style scoped></style>
