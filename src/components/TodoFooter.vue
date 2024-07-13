@@ -1,11 +1,12 @@
 <template>
-  <footer class="footer" v-if="todos.length > 0">
+  <footer v-if="todos.length > 0" class="footer">
     <span class="todo-count">
-      <strong>{{ remaining }}</strong> tâche {{ remaining > 1 ? 's' : '' }} restante
-      {{ remaining > 1 ? 's' : '' }}
+      <strong>{{ remaining }}</strong> tâche{{ remaining > 1 ? 's' : '' }} restante{{
+        remaining > 1 ? 's' : ''
+      }}
     </span>
     <ul class="filters">
-      <li class="">
+      <li>
         <router-link to="#">Tous</router-link>
       </li>
       <li>
@@ -21,12 +22,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import type { Todo } from '@/@types'
+import { computed } from 'vue'
+
 const props = defineProps<{
   todos: Todo[]
 }>()
-const remaining = computed(() => props.todos.filter((todo) => !todo.completed).length)
+
+const remaining = computed(() => props.todos.filter((todo) => !todo.complete).length)
 </script>
 
 <style scoped></style>

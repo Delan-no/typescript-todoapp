@@ -1,32 +1,36 @@
 <template>
   <div>
-    <!-- Header -->
-    <Header @add-todo="addTodo" />
+    <TodoHeader @add-todo="addTodo" />
 
-    <!-- TodoMain -->
-    <TodoMain :taches="todos" />
+    <TodoMain :taches="todos" @delete-todo="deleteTodo" />
 
-    <!-- TodoFooter -->
     <TodoFooter :todos="todos" />
   </div>
 </template>
 
 <script setup lang="ts">
-import Header from '@/components/TodoHeader.vue'
+import TodoHeader from '@/components/TodoHeader.vue'
 import TodoMain from '@/components/TodoMain.vue'
 import TodoFooter from '@/components/TodoFooter.vue'
 import type { Todo } from '@/@types'
-import { nanoid } from 'nanoid'
 import { ref } from 'vue'
+import { nanoid } from 'nanoid'
 
 const todos = ref<Todo[]>([])
-
-function addTodo(value: string) {
+function addTodo(value: string): void {
   todos.value.push({
     id: nanoid(),
     title: value,
-    completed: false
+    complete: false
   })
+}
+
+function deleteTodo(todo: Todo): void {
+  todos.value = todos.value.filter((t) => t !== todo)
+}
+
+function updateTodo(todo: Todo, completedValue: boolean): void {
+  todo.comlete = completedValue
 }
 </script>
 

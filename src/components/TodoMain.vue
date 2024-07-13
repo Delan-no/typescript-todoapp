@@ -1,28 +1,32 @@
 <template>
   <main class="main">
     <ul class="todo-list">
-      <li :class="{ completed: todo.completed }" v-for="todo in taches" :key="todo.id">
-        <div class="view">
-          <input type="checkbox" class="toggle" />
-          <label for="">{{ todo.title }}</label>
-          <button class="destroy"></button>
-        </div>
-      </li>
+      <TodoItem
+        v-for="todo in taches"
+        :key="todo.id"
+        :todo="todo"
+        @delete-todo="emit('delete-todo', todo)"
+      />
     </ul>
   </main>
 </template>
 
 <script setup lang="ts">
-import 'todomvc-app-css/index.css'
-interface Todo {
-  id: number
-  title: string
-  completed: boolean
-}
-// const props = defineProps(['taches'])
+import type { Todo } from '@/@types'
+import TodoItem from '@/components/TodoItem.vue'
+// const props = defineProps(['taches']);
+
 const props = defineProps<{
   taches: Todo[]
 }>()
+
+const emit = defineEmits<{
+  (e: 'delete-todo', todo: Todo): void
+}>()
+
+function updateTodo(todo: Todo, completedValue: boolean): void {
+  emit('update-todo', todo, completedValue)
+}
 </script>
 
 <style scoped></style>

@@ -1,13 +1,13 @@
 <template>
   <header class="header">
     <RouterLink to="/">
-      <h1 class>Todos</h1>
+      <h1>todos</h1>
     </RouterLink>
 
     <input
+      class="new-todo"
       type="text"
       placeholder="Entrez une tâche"
-      class="new-todo"
       autofocus
       autocomplete="off"
       @keyup.enter="
