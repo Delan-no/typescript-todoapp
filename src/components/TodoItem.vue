@@ -1,29 +1,28 @@
 <template>
   <li :class="{ completed: todo.complete, editing: editing }">
     <div class="view">
-      <input type="checkbox" class="toggle" v-model="isChecked" />
-      <label @dblclick="startEditing" for="">{{ todo.title }}</label>
+      <input type="checkbox" class="toggle" v-model="isTodoCompleted" />
+      <label @dblclick="startEditing">{{ todo.title }}</label>
       <button class="destroy" @click="emit('delete-todo', todo)"></button>
     </div>
     <div class="input-container">
       <input
-        ref ="editRef"
+        ref="editRef"
         id="edit-to-input"
-        type="text"
         class="edit"
+        type="text"
         v-model="editInput"
         @keyup.enter="finishEdit"
         @blur="cancelEdit"
       />
-      <label class="visully-hidden" for="edit-to-input">Editer</label>
+      <label class="visually-hidden" for="edit-to-input">Editer</label>
     </div>
   </li>
-  <!-- <pre>{{ todo }}</pre> -->
 </template>
 
 <script setup lang="ts">
 import type { Todo } from '@/@types'
-import { ref, watch, computed, nextTick } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 const props = defineProps<{
   todo: Todo
 }>()
@@ -34,67 +33,59 @@ const emit = defineEmits<{
   (e: 'edit-todo', todo: Todo, value: string): void
 }>()
 
-// const isChecked = computed({
-//   get: ()=> props.todo.complete,
-//   set: (newVal: boolean)=> emit('update-todo',props.todo, newVal)
-// })
-
-const isChecked = ref<boolean>(props.todo.complete)
-
-watch(
-  () => isChecked.value,
-  (newVal) => {
-    emit('update-todo', props.todo, newVal)
+const isTodoCompleted = computed<boolean>({
+  get: () => props.todo.complete,
+  set: (value: boolean) => {
+    emit('update-todo', props.todo, value)
   }
-)
+})
 
-const editRef = ref<HTMLInputElement>();
-
+const editRef = ref<HTMLInputElement>() // élement du dom
 const editing = ref<boolean>(false)
-
 const editText = ref<string>('')
-
 const editInput = computed({
   get: () => props.todo.title,
-  set: (newVal) => {
-    editText.value = newVal
+  set: (val) => {
+    editText.value = val
   }
 })
 
 function startEditing() {
-  editing.value = true;
-  
-  //faire un focus sur le champ de saisie
-  nextTick (() =>{
-    editRef.value?.focus()
+  editing.value = true
 
+  // faire un focus sur le champs de saisie
+  nextTick(() => {
+    editRef.value!.focus()
   })
 }
-function editTodo() {
-  emit('edit-todo', props.todo, editText.value)
-  editText.value = ''
-}
+
 function finishEdit() {
   editing.value = false
+
   editTodo()
 }
+
+function editTodo() {
+  emit('edit-todo', props.todo, editText.value) // emettre un event
+
+  editText.value = ''
+}
+
 function cancelEdit() {
-  // alert('cancel')
-  console.log('cancel');
-  
+  editing.value = false
 }
 </script>
 
 <style scoped>
-.visully-hidden{
+.visually-hidden {
   bottom: 0;
-  clip: rect(0 0 0 0);
-  clip-path: 58%;
+  clip-path: rect(0 0 0 0);
   height: 1px;
   width: 1px;
   margin: -1px;
   padding: 0;
   overflow: hidden;
   position: absolute;
+  white-space: nowrap;
 }
 </style>

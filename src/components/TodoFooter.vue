@@ -7,28 +7,44 @@
     </span>
     <ul class="filters">
       <li>
-        <router-link to="#">Tous</router-link>
+        <router-link :class="{ selected: route.path === '/' }" to="/">Tous</router-link>
       </li>
       <li>
-        <router-link to="#">En cours</router-link>
+        <router-link :class="{ selected: route.path === '/waiting' }" to="/waiting"
+          >En cours</router-link
+        >
       </li>
       <li>
-        <router-link to="#">Terminés</router-link>
+        <router-link :class="{ selected: route.path === '/completed' }" to="/completed"
+          >Terminés</router-link
+        >
       </li>
     </ul>
 
-    <button class="clear-completed">Eff. tâches terminées</button>
+    <button
+      class="clear-completed"
+      @click="emit('delete-completed')"
+      v-show="todos.some((todo) => todo.complete)"
+    >
+      Eff. tâches terminées
+    </button>
   </footer>
 </template>
 
 <script setup lang="ts">
 import type { Todo } from '@/@types'
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
 const props = defineProps<{
   todos: Todo[]
 }>()
 
+const emit = defineEmits<{
+  (e: 'delete-completed'): void
+}>()
+
+const route = useRoute()
 const remaining = computed(() => props.todos.filter((todo) => !todo.complete).length)
 </script>
 
