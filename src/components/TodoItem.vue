@@ -63,8 +63,8 @@ const editInput = computed({
 
 function startEditing() {
   editing.value = true;
+  
   //faire un focus sur le champ de saisie
-
   nextTick (() =>{
     editRef.value?.focus()
 
