@@ -6,6 +6,8 @@
         :key="todo.id"
         :todo="todo"
         @delete-todo="emit('delete-todo', todo)"
+        @update-todo="updateTodo"
+        @edit-todo="editTodo"
       />
     </ul>
   </main>
@@ -22,10 +24,16 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'delete-todo', todo: Todo): void
+  (e: 'update-todo', todo: Todo, completeVal: boolean): void
+  (e: 'edit-todo', todo: Todo, value: string): void
 }>()
 
-function updateTodo(todo: Todo, completedValue: boolean): void {
+function updateTodo(todo: Todo, completedValue: boolean) {
   emit('update-todo', todo, completedValue)
+}
+
+function editTodo(todo: Todo, value: string) {
+  emit('edit-todo', todo, value)
 }
 </script>
 
